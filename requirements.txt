@@ -11,7 +11,9 @@ python-dotenv==1.0.0
 pydantic==2.5.0
 groq==0.4.2
 sentence-transformers==2.2.2
-chromadb==0.5.2
 numpy==1.24.3
 pandas==2.0.3
 requests==2.31.0
+setuptools>=68.0
+wheel
+chromadb==0.4.24

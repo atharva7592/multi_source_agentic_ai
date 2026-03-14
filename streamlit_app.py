@@ -3,8 +3,16 @@ Streamlit web interface for the Multi-Source Agentic Q&A Assistant.
 Run with: streamlit run streamlit_app.py
 """
 import streamlit as st
-from supervisor_graph import build_graph, format_answer_with_sources
-from conversation_memory import create_memory
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Check if API key is set FIRST
+groq_key = os.getenv("GROQ_API_KEY")
+if not groq_key:
+    st.error("❌ GROQ_API_KEY not configured. Please add it to Streamlit Secrets.")
+    st.stop()
 
 # Page configuration
 st.set_page_config(
@@ -13,6 +21,14 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Import modules AFTER checking API key
+try:
+    from supervisor_graph import build_graph, format_answer_with_sources
+    from conversation_memory import create_memory
+except Exception as e:
+    st.error(f"❌ Error loading modules: {str(e)}")
+    st.stop()
 
 # CSS Styling
 st.markdown("""
@@ -31,14 +47,6 @@ st.markdown("""
     .assistant-message {
         background-color: #f5f5f5;
         border-left: 4px solid #4CAF50;
-    }
-    .source-badge {
-        display: inline-block;
-        padding: 5px 10px;
-        margin: 5px 5px 5px 0;
-        background-color: #E8F5E9;
-        border-radius: 20px;
-        font-size: 12px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -90,17 +98,10 @@ with st.sidebar:
     st.subheader("💬 Conversation History")
     
     if len(st.session_state.memory) > 0:
-        # Show recent conversations
-        for i, msg in enumerate(st.session_state.memory.get_messages_formatted()):
-            if msg["role"] == "user":
-                st.write(f"👤 **You:** {msg['content'][:60]}..." if len(msg['content']) > 60 else f"👤 **You:** {msg['content']}")
-            else:
-                agent_info = ""
-                if i < len(st.session_state.memory.messages):
-                    agent = st.session_state.memory.messages[i].get("agent", "")
-                    if agent:
-                        agent_info = f" ({agent})"
-                st.write(f"🤖 **Assistant{agent_info}:** {msg['content'][:60]}..." if len(msg['content']) > 60 else f"🤖 **Assistant{agent_info}:** {msg['content']}")
+        for msg in st.session_state.memory.messages[:10]:  # Last 10
+            role_icon = "👤" if msg.get("role") == "user" else "🤖"
+            agent_info = f" ({msg.get('agent', '')})" if msg.get('agent') else ""
+            st.write(f"{role_icon} {msg['content'][:50]}...{agent_info}")
     else:
         st.info("No conversation yet. Start by asking a question!")
 
@@ -129,7 +130,7 @@ for msg in st.session_state.messages:
             st.write(msg["content"])
             
             # Show sources if available
-            if "sources" in msg and msg["sources"] and msg["sources"][0] != "Error":
+            if "sources" in msg and msg["sources"]:
                 with st.expander(f"📎 Sources ({msg.get('agent', 'Unknown')})"):
                     for i, source in enumerate(msg["sources"], 1):
                         st.write(f"**{i}. {source}**")
@@ -165,7 +166,7 @@ if user_input:
                 st.write(answer)
                 
                 # Show sources
-                if sources and sources[0] != "Error":
+                if sources:
                     with st.expander(f"📎 Sources ({agent})"):
                         for i, source in enumerate(sources, 1):
                             st.write(f"**{i}. {source}**")
@@ -188,8 +189,4 @@ if user_input:
 
 # Footer
 st.markdown("---")
-st.markdown("""
-<div style='text-align: center; color: gray; font-size: 12px;'>
-    🤖 Multi-Source Agentic Q&A Assistant | Powered by LangChain, LangGraph & Groq
-</div>
-""", unsafe_allow_html=True)
+st.caption("💡 Examples: 'List first 5 products' | 'How many customers?' | 'Show orders from 1996'")
