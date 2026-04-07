@@ -5,7 +5,7 @@ langchain-core==0.1.52
 langchain-community==0.0.38
 langgraph==0.0.50
 python-dotenv==1.0.0
-pydantic==2.7.0
+pydantic==2.12.5
 groq==0.4.2
 pillow>=11.0.0
 rich<14
