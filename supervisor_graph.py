@@ -1,9 +1,23 @@
 from langgraph.graph import StateGraph, END
+from typing import TypedDict, List, Optional
 
 from sql_agent_enhanced import get_sql_agent
 from rag_agent_enhanced import get_rag_agent
 from query_validator import create_validator
 from conversation_memory import create_memory
+
+
+# Define explicit state schema for compatibility with newer pydantic
+class GraphState(TypedDict):
+    """State schema for the supervisor graph."""
+    question: str
+    is_valid: bool
+    validation_reason: Optional[str]
+    next_agent: Optional[str]
+    answer: Optional[str]
+    sources: Optional[List[str]]
+    sources_str: Optional[str]
+    agent: Optional[str]
 
 
 # Initialize agents
@@ -182,7 +196,7 @@ def rag_node(state):
 def build_graph():
     """Build the supervisor graph for agent orchestration with validation"""
     
-    graph = StateGraph(dict)
+    graph = StateGraph(GraphState)
     
     # Add nodes
     graph.add_node("validator", validation_node)
