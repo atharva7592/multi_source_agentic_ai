@@ -1,3 +1,4 @@
+import os
 from langchain_community.document_loaders import DirectoryLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
@@ -5,8 +6,11 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 
 print("Loading documents...")
 
+# Get data path - works on local and Streamlit Cloud
+data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "company_docs")
+
 loader = DirectoryLoader(
-    "data/company_docs",
+    data_path,
     glob="*.txt"
 )
 
@@ -29,10 +33,13 @@ embeddings = HuggingFaceEmbeddings(
 
 print("Creating vector database...")
 
+# Get vectorstore path - works on local and Streamlit Cloud
+vectorstore_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vectorstore")
+
 vectordb = Chroma.from_documents(
     documents=chunks,
     embedding=embeddings,
-    persist_directory="vectorstore"
+    persist_directory=vectorstore_path
 )
 
 print("Vector database created successfully!")

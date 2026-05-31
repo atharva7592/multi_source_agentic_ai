@@ -24,8 +24,11 @@ class EnhancedRAGAgent:
             model_name="sentence-transformers/all-MiniLM-L6-v2"
         )
         
+        # Get vectorstore path - works on local and Streamlit Cloud
+        vectorstore_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vectorstore")
+        
         self.vectordb = Chroma(
-            persist_directory="vectorstore",
+            persist_directory=vectorstore_path,
             embedding_function=self.embeddings
         )
         

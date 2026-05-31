@@ -10,9 +10,13 @@ load_dotenv()
 def get_sql_agent():
 
     print("Initializing SQL agent...")
+    
+    # Get database path - works on local and Streamlit Cloud
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "database", "northwind.db")
+    db_uri = f"sqlite:///{db_path.replace(chr(92), '/')}"
 
     db = SQLDatabase.from_uri(
-        "sqlite:///database/northwind.db",
+        db_uri,
         sample_rows_in_table_info=2
     )
 
