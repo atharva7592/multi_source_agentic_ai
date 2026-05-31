@@ -13,7 +13,9 @@ def get_sql_agent():
     
     # Get database path - works on local and Streamlit Cloud
     db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "database", "northwind.db")
-    db_uri = f"sqlite:///{db_path.replace(chr(92), '/')}"
+    # Convert to forward slashes for SQLite URI
+    db_path = db_path.replace("\\", "/")
+    db_uri = f"sqlite:///{db_path}"
 
     db = SQLDatabase.from_uri(
         db_uri,

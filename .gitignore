@@ -43,8 +43,7 @@ env/
 *~
 .DS_Store
 
-# Database & Vector Store (generated at runtime)
-database/northwind.db
+# Vector Store (can be regenerated at runtime)
 vectorstore/
 
 # Logs
