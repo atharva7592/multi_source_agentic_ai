@@ -2,8 +2,13 @@
 Streamlit web interface for the Multi-Source Agentic Q&A Assistant.
 Run with: streamlit run streamlit_app.py
 """
-import streamlit as st
 import os
+import sys
+
+# Fix protobuf compatibility issue (must be BEFORE other imports)
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
+
+import streamlit as st
 from dotenv import load_dotenv
 
 load_dotenv()
