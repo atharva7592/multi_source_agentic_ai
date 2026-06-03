@@ -2,7 +2,7 @@
 
 A sophisticated multi-agent Q&A system that integrates SQL database queries and document retrieval using RAG (Retrieval-Augmented Generation). Built with LangChain, LangGraph, and Groq's high-speed LLM inference.
 
-**🚀 [Live Demo on Streamlit Cloud](https://share.streamlit.io/YOUR_GITHUB_USERNAME/multi_source_agentic_ai/main/streamlit_app.py)** 
+**🚀 [Live Demo on Streamlit Cloud](https://multisourceagenticai-a3zaogrugorbbbsgk4kxed.streamlit.app/)** ← **Click here to try it now!**
 
 ## Features
 
