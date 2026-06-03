@@ -1,0 +1,27 @@
+[client]
+showErrorDetails = false
+maxMessageSize = 200
+
+[server]
+port = 8501
+headless = true
+runOnSave = true
+maxUploadSize = 200
+
+[logger]
+level = "error"
+
+[theme]
+primaryColor = "#FF6B6B"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F2F6"
+textColor = "#262730"
+font = "sans serif"
+
+[cache]
+maxEntries = 1000
+expiration_seconds = 3600
+
+[UI]
+hideTopBar = false
+hideSidebarNav = false
